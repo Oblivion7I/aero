@@ -1,0 +1,58 @@
+apply plugin: "com.android.application"
+apply plugin: "org.jetbrains.kotlin.android"
+apply plugin: "com.facebook.react"
+
+react {
+    autolinkLibrariesWithApp()
+}
+
+def enableProguardInReleaseBuilds = true
+
+android {
+    ndkVersion rootProject.ext.ndkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
+    compileSdk rootProject.ext.compileSdkVersion
+
+    namespace "com.afmtechnologies.aero"
+
+    defaultConfig {
+        applicationId "com.afmtechnologies.aero"
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode 1
+        versionName "1.0.0"
+    }
+
+    signingConfigs {
+        release {
+            def storeFilePath = project.hasProperty('AERO_UPLOAD_STORE_FILE') ? AERO_UPLOAD_STORE_FILE : null
+            if (storeFilePath != null) {
+                storeFile file(storeFilePath)
+                storePassword project.hasProperty('AERO_UPLOAD_STORE_PASSWORD') ? AERO_UPLOAD_STORE_PASSWORD : ""
+                keyAlias project.hasProperty('AERO_UPLOAD_KEY_ALIAS') ? AERO_UPLOAD_KEY_ALIAS : ""
+                keyPassword project.hasProperty('AERO_UPLOAD_KEY_PASSWORD') ? AERO_UPLOAD_KEY_PASSWORD : ""
+            }
+        }
+    }
+
+    buildTypes {
+        debug {
+            signingConfig signingConfigs.debug
+        }
+        release {
+            signingConfig signingConfigs.release
+            minifyEnabled enableProguardInReleaseBuilds
+            shrinkResources enableProguardInReleaseBuilds
+            proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+        }
+    }
+}
+
+dependencies {
+    implementation("com.facebook.react:react-android")
+    implementation("com.facebook.react:hermes-android")
+    implementation platform("com.google.firebase:firebase-bom:33.1.0")
+}
+
+// Applied last — reads android/app/google-services.json once added (see docs/installation.md).
+apply plugin: "com.google.gms.google-services"

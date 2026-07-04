@@ -1,0 +1,12 @@
+This directory needs a gradle-wrapper.jar file to make gradlew/gradlew.bat
+work standalone. It's a small compiled binary distributed by Gradle, and
+isn't included in this scaffold since it isn't source code.
+
+To generate it, run once (requires a local Gradle install or Android Studio):
+  gradle wrapper --gradle-version 8.8
+
+Or simply open android/ in Android Studio — it will regenerate the wrapper
+jar automatically on first sync.
+
+gradle-wrapper.properties (which points at the correct Gradle version) is
+already included in this folder.
